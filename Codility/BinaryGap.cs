@@ -1,5 +1,6 @@
 // https://app.codility.com/programmers/lessons/1-iterations/binary_gap/
 
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.ExceptionServices;
 
@@ -28,10 +29,13 @@ public class BinaryGap
         return result;
     }
 
-    public static int CountBinaryGap(long binaryNumber)
+    public static int[] CountBinaryGap(long binaryNumber)
     {
         int result = 0;
         bool headFlag = false;
+        int count = 0;
+        int max = 0;
+
         while (binaryNumber > 0)
         {
             long check = binaryNumber % 10;
@@ -40,24 +44,35 @@ public class BinaryGap
                 if (headFlag)
                 {
                     result+=1;
+                    if(max < count)
+                    {
+                        max = count;
+                    }
+                    count = 0;
                 }
                 else
                 {
                     headFlag = true;
                 }
+            } 
+            else
+            {
+                count++;
             }
             binaryNumber /= 10;
         }
-        return result;
+        int[] finalResult = {result, max};
+        return finalResult;
     }
 
     public static void Main(string[] args)
     {
-        int fisrtNumber = 1041; // use number that <1024 due to int range value
+        int fisrtNumber = 1041; // use number that in the value range of long when convert to binary
         long binaryNumber = BinaryGap.ConvertToBinary(fisrtNumber);
         Console.WriteLine(binaryNumber);
-        int numberOfGap = BinaryGap.CountBinaryGap(binaryNumber);
-        Console.WriteLine(numberOfGap);
+        int[] numberOfGap = BinaryGap.CountBinaryGap(binaryNumber);
+        Console.WriteLine(string.Format("Number of Gap: {0}", numberOfGap[0]));
+        Console.WriteLine(string.Format("Max length of Gap: {0}", numberOfGap[1]));
     }
 }
 
